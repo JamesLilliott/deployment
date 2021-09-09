@@ -8,17 +8,23 @@ yum update -y
 sudo amazon-linux-extras install -y php8.0
 # yum install -y php-mbstring php-xml php-fpm php-zip php-common php-fpm php-cli unzip curl
 
+# Setup application folder
+mkdir /var/www
+mkdir /var/www/utilities
+mkdir /var/www/utilities/public
+touch /var/www/utilities/public/index.php
+touch /etc/nginx/conf.d/utilities.conf
+
 # Nginx
-sudo amazon-linux-extras install -y nginx1
+amazon-linux-extras install -y nginx1
+wget -O /etc/nginx/conf.d/utilities.conf https://raw.githubusercontent.com/JamesLilliott/deployment/main/utilities/lib/nginx.conf
+
+chmod -R 755 /var/www/utilities
+echo "<?php phpinfo(); ?>" > /var/www/utilities/public/index.php
+
 systemctl enable nginx
 systemctl start nginx
 
-# Install Composer
-curl -s https://getcomposer.org/installer | php
-mv composer.phar /usr/local/bin/composer
-
-# Sample page
-echo "<h1>Hello World from $(hostname -f)</h1>" > /var/www/html/index.html
-
-mkdir /var/www/utilities
-
+# Composer
+# curl -s https://getcomposer.org/installer | php
+# mv composer.phar /usr/local/bin/composer
